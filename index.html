@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Connect — Find Your Learning Partner</title>
+  <meta name="description" content="Discover study partners, mentors, and educators. The smartest way to connect with learners worldwide.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🔗</div>
+      <span class="brand-name">Learning<span>Connect</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Discover</a>
+      <a href="register.html" class="nav-link">Register</a>
+      <a href="admin.html" class="nav-link">Admin</a>
+      <a href="register.html" class="nav-cta">Join Now →</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">✦ Beta — Join the waitlist</div>
+    <h1>Find Your Perfect<br><span class="grad">Learning Partner</span></h1>
+    <p>Connect with students, mentors, and educators who share your passion. Knowledge grows faster together.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num" id="hero-count">—</div>
+        <div class="stat-label">Active Profiles</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Verified</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">Free</div>
+        <div class="stat-label">Always</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDED BANNER -->
+  <div class="recommended-banner">
+    <div class="rec-icon">⭐</div>
+    <div>
+      <strong>Trending Interests: Machine Learning · Web Dev · UI/UX Design · Data Science</strong>
+      <p>Use filters below to discover profiles aligned to your goals.</p>
+    </div>
+  </div>
+
+  <!-- FILTERS BAR -->
+  <div class="filters-bar">
+    <div class="search-wrap">
+      <span class="ico">🔍</span>
+      <input type="text" id="search-input" placeholder="Search by name, skill…">
+    </div>
+
+    <button class="filter-pill active" data-role="">All</button>
+    <button class="filter-pill" data-role="student">📚 Students</button>
+    <button class="filter-pill" data-role="educator">🎓 Educators</button>
+
+    <select id="filter-level" class="filter-select">
+      <option value="">All Levels</option>
+      <option value="beginner">🌱 Beginner</option>
+      <option value="intermediate">⚡ Intermediate</option>
+      <option value="advanced">🔥 Advanced</option>
+    </select>
+
+    <select id="filter-interest" class="filter-select">
+      <option value="">All Interests</option>
+    </select>
+
+    <span class="filter-count" id="filter-count"></span>
+  </div>
+
+  <!-- CARDS GRID -->
+  <section class="grid-section">
+    <div class="cards-grid" id="cards-grid">
+      <!-- cards injected by JS -->
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    Made with ❤️ · <a href="register.html">Join as Student or Educator</a> · <a href="admin.html">Admin</a>
+  </footer>
+
+</div>
+
+<!-- SPINNER -->
+<div class="spinner-overlay" id="spinner">
+  <div class="spinner"></div>
+  <div class="spinner-text">Loading profiles…</div>
+</div>
+
+<!-- TOASTS -->
+<div id="toast-container"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

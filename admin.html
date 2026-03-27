@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Learning Connect</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-wrap" id="login-wrap">
+    <div class="login-card">
+      <div class="login-icon">🛡️</div>
+      <h2>Admin Access</h2>
+      <p>Enter the admin password to manage profiles.</p>
+      <form id="login-form">
+        <div class="form-group">
+          <input type="password" id="admin-pw" class="form-input" placeholder="Password" autocomplete="off" required style="text-align:center;letter-spacing:.2em;">
+        </div>
+        <button type="submit" class="submit-btn" style="margin-top:.75rem;">Unlock Panel →</button>
+      </form>
+      <p style="margin-top:1.5rem;font-size:.78rem;color:var(--muted)">
+        Default: <code style="color:var(--accent)">admin123</code> — Change in script.js
+      </p>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL (hidden until login) -->
+  <div id="admin-panel" style="display:none;">
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">🔗</div>
+        <span class="brand-name">Learning<span>Connect</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">← Site</a>
+        <button id="refresh-btn" class="nav-link" style="cursor:pointer;background:none;border:none;color:var(--muted);">↻ Refresh</button>
+        <button id="logout-btn" class="nav-link" style="cursor:pointer;background:none;border:none;color:var(--danger);">🔓 Logout</button>
+      </div>
+    </nav>
+
+    <!-- ADMIN HEADER -->
+    <div class="admin-header">
+      <div>
+        <div class="admin-title">Admin <span>Panel</span></div>
+        <p style="font-size:.85rem;color:var(--muted);margin-top:.25rem">Review, approve, and manage all profiles.</p>
+      </div>
+      <div class="admin-stats">
+        <div class="admin-stat-chip pending"  id="stat-pending">⏳ Pending 0</div>
+        <div class="admin-stat-chip approved" id="stat-approved">✓ Approved 0</div>
+        <div class="admin-stat-chip rejected" id="stat-rejected">✕ Rejected 0</div>
+      </div>
+    </div>
+
+    <!-- SECTIONS -->
+    <div class="admin-sections">
+
+      <!-- PENDING -->
+      <div class="section-header">
+        <div class="section-dot pending"></div>
+        <div class="section-label">Pending Review</div>
+        <div class="section-count" id="cnt-pending">0</div>
+      </div>
+      <div id="list-pending"></div>
+
+      <!-- APPROVED -->
+      <div class="section-header">
+        <div class="section-dot approved"></div>
+        <div class="section-label">Approved & Live</div>
+        <div class="section-count" id="cnt-approved">0</div>
+      </div>
+      <div id="list-approved"></div>
+
+      <!-- REJECTED -->
+      <div class="section-header">
+        <div class="section-dot rejected"></div>
+        <div class="section-label">Rejected</div>
+        <div class="section-count" id="cnt-rejected">0</div>
+      </div>
+      <div id="list-rejected"></div>
+
+    </div>
+
+    <footer class="footer">
+      Learning Connect Admin Panel · <a href="index.html">View Site</a>
+    </footer>
+
+  </div><!-- /admin-panel -->
+
+  <!-- EDIT MODAL -->
+  <div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">✏️ Edit Profile</div>
+        <button class="modal-close" id="close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-id">
+
+        <div class="form-section-title">Basic Info</div>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="edit-name" class="form-input">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Role</label>
+            <select id="edit-role" class="form-select">
+              <option value="student">📚 Student</option>
+              <option value="educator">🎓 Educator</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Level</label>
+            <select id="edit-level" class="form-select">
+              <option value="beginner">🌱 Beginner</option>
+              <option value="intermediate">⚡ Intermediate</option>
+              <option value="advanced">🔥 Advanced</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Interest</label>
+          <input type="text" id="edit-interest" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bio</label>
+          <textarea id="edit-bio" class="form-textarea"></textarea>
+        </div>
+
+        <div class="form-section-title">Contact & Photo</div>
+        <div class="form-group">
+          <label class="form-label">Contact Link (WhatsApp/Telegram)</label>
+          <input type="url" id="edit-contact" class="form-input" placeholder="https://wa.me/91…">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Profile Photo URL</label>
+          <input type="url" id="edit-photo" class="form-input" placeholder="https://…">
+        </div>
+
+        <div class="form-section-title">Social Links</div>
+        <div class="form-group">
+          <label class="form-label">📷 Instagram</label>
+          <input type="url" id="edit-instagram" class="form-input" placeholder="https://instagram.com/…">
+        </div>
+        <div class="form-group">
+          <label class="form-label">▶ YouTube</label>
+          <input type="url" id="edit-youtube" class="form-input" placeholder="https://youtube.com/…">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🌐 Facebook</label>
+          <input type="url" id="edit-facebook" class="form-input" placeholder="https://facebook.com/…">
+        </div>
+
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">
+          ℹ️ Editing does not change the profile's approval status.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancel-edit">Cancel</button>
+        <button class="btn-primary" id="save-edit">💾 Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SPINNER -->
+<div class="spinner-overlay hidden" id="spinner">
+  <div class="spinner"></div>
+  <div class="spinner-text">Updating…</div>
+</div>
+
+<!-- TOASTS -->
+<div id="toast-container"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
